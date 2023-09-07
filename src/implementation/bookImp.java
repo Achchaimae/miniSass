@@ -10,6 +10,7 @@ import dto.book;
 import interfeces.Ibook;
 import helper.DatabaseConnection;
 
+
 import javax.swing.*;
 
 public class bookImp implements Ibook {
@@ -48,13 +49,13 @@ public class bookImp implements Ibook {
     @Override
     public book add(book book) {
         java.sql.Connection connection = DatabaseConnection.getConn();
-        String query = "INSERT INTO books (title, author, isbn, status) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO books (title, author, isbn) VALUES (?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getAuthor());
             statement.setInt(3, book.getISBN());
-            statement.setObject(4, book.getStatus(), Types.OTHER); // Set the enum value
+            //statement.setObject(4, book.getStatus(), Types.OTHER); // Set the enum value
 
             int rowsAffected = statement.executeUpdate();
 
@@ -181,5 +182,16 @@ public class bookImp implements Ibook {
         return null;
     }
 
-
+    @Override
+    public book borrow(int isbn) {
+        System.out.println("Borrowing book with ISBN " + isbn);
+        return null;
     }
+
+    @Override
+    public book returnBook(int isbn) {
+        return null;
+    }
+
+
+}

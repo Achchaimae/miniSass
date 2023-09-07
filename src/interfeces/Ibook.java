@@ -14,4 +14,8 @@ public interface Ibook {
     book search(String title);
     book searchByIsbn(int ISBN);
 
+    book borrow(int isbn);
+    book returnBook(int isbn);
+
+
 }
