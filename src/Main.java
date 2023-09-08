@@ -2,6 +2,7 @@ import dto.book;
 import dto.borrower;
 import dto.status;
 import implementation.bookImp;
+import implementation.borrowed_booksImp;
 import implementation.borrowerImp;
 import interfeces.Iborrower;
 
@@ -114,7 +115,7 @@ public class Main {
                 imp2.search(search);
                 break;
             case 4 :
-                String iSBN1 = JOptionPane.showInputDialog("Insert the ISBN of the book for update");
+                String iSBN1 = JOptionPane.showInputDialog("Insert the ISBN of the book for borrow");
                 int isbn = Integer.parseInt(iSBN1);
                 bookImp IMP = new bookImp();
                 book foundBook2 = IMP.searchByIsbn(isbn);
@@ -125,7 +126,8 @@ public class Main {
 
                     switch (yn) {
                         case 1:
-                            IMP.borrow(isbn);
+                            bookImp imp3 = new bookImp();
+                            imp3.borrow(isbn);
                             break;
                         case 2:
                             JOptionPane.showMessageDialog(null, "See you again!");
@@ -138,10 +140,35 @@ public class Main {
                 }
 
             case 5 :
-                JOptionPane.showInputDialog("Insert the ISBN code for the return ");
-                break;
+                String iSBN3 = JOptionPane.showInputDialog("Insert the ISBN of the book for return");
+                int isbn2 = Integer.parseInt(iSBN3);
+                bookImp IMP3 = new bookImp();
+                book foundBook = IMP3.searchByIsbn(isbn2);
+                if(foundBook!= null) {
+                    String l1 = JOptionPane.showInputDialog("Do you want to return this book?\n1: Yes\n2: No");
+                    int yn = Integer.parseInt(l1);
+
+                    switch (yn) {
+                        case 1:
+                            bookImp imp3 = new bookImp();
+                            imp3.returnBook(isbn2);
+                            break;
+                        case 2:
+                            JOptionPane.showMessageDialog(null, "See you again!");
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "Invalid option");
+                            break;
+                    }
+
+                }
             case 6 :
-                JOptionPane.showMessageDialog(null, "6");
+                //call the function static report
+                book b1 = book.getInstance();
+                bookImp imp1 = new bookImp();
+                imp1.statistics();
+
+
                 break;
                 case 7 :
                     String list4 = JOptionPane.showInputDialog("what action do you want \n " +

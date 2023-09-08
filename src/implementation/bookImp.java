@@ -1,31 +1,40 @@
 package implementation;
+import dto.borrowed_books;
 
 import  dto.status;
 
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import helper.DatabaseConnection;
 
 import dto.book;
 import interfeces.Ibook;
 import helper.DatabaseConnection;
+import interfeces.Iborrower;
 
 
 import javax.swing.*;
 
+import java.util.Date;
 public class bookImp implements Ibook {
 
 
     public bookImp() {
     }
 
+    //good practice to use private connection
+    private Connection conx = DatabaseConnection.getConn();
 
     @Override
     public book show(book b) {
-        java.sql.Connection connection = DatabaseConnection.getConn();
         String query = "SELECT * FROM books";
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
@@ -48,10 +57,9 @@ public class bookImp implements Ibook {
 
     @Override
     public book add(book book) {
-        java.sql.Connection connection = DatabaseConnection.getConn();
         String query = "INSERT INTO books (title, author, isbn) VALUES (?, ?, ?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getAuthor());
             statement.setInt(3, book.getISBN());
@@ -75,9 +83,8 @@ public class bookImp implements Ibook {
 
     @Override
     public book update(book b) {
-        java.sql.Connection connection = DatabaseConnection.getConn();
         String query = "UPDATE books SET title = ?, author = ?, status = ? WHERE isbn = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
             statement.setString(1, b.getTitle());
             statement.setString(2, b.getAuthor());
             statement.setObject(3, b.getStatus(), Types.OTHER); // Set the enum value
@@ -97,9 +104,8 @@ public class bookImp implements Ibook {
 
     @Override
     public book delete(int bookId) {
-        java.sql.Connection connection = DatabaseConnection.getConn();
         String query = "DELETE FROM books WHERE isbn = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
             statement.setInt(1, bookId);
 
             int rowsAffected = statement.executeUpdate();
@@ -112,15 +118,13 @@ public class bookImp implements Ibook {
             throw new RuntimeException(e);
         }
 
-        return null; // You might want to reconsider the return type or implementation for the delete operation
+        return null;
     }
 
     @Override
     public book search(String title) {
-        java.sql.Connection connection = DatabaseConnection.getConn();
-
         String query = "SELECT * FROM books WHERE title LIKE ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
             String likeTerm = "%" + title + "%";
             statement.setString(1, likeTerm);
 
@@ -155,10 +159,8 @@ public class bookImp implements Ibook {
 
     @Override
     public book searchByIsbn(int ISBN) {
-        System.out.println("Searching for book with ISBN " + ISBN);
-        java.sql.Connection connection = DatabaseConnection.getConn();
         String query = "SELECT * FROM books WHERE isbn = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
             statement.setInt(1, ISBN);
 
             ResultSet rs = statement.executeQuery();
@@ -184,14 +186,124 @@ public class bookImp implements Ibook {
 
     @Override
     public book borrow(int isbn) {
-        System.out.println("Borrowing book with ISBN " + isbn);
+        String name = JOptionPane.showInputDialog("Insert the name of the borrower for borrow");
+        //call the searchName method to get the id of the borrower
+        Iborrower IMp = new borrowerImp();
+        int foundBorrower1= IMp.search(name);
+        //insert into borrowed_books table
+        //call the borrow method from borrowed_booksImp
+        borrowed_booksImp borrowed_booksImp = new borrowed_booksImp();
+        //set the date to the current date
+        java.sql.Date date = new java.sql.Date(new Date().getTime());
+        borrowed_booksImp.borrow(isbn,foundBorrower1, date );
+
+
+
         return null;
     }
+
 
     @Override
     public book returnBook(int isbn) {
-        return null;
+
+        //insert into borrowed_books table
+        //call the borrow method from borrowed_booksImp
+        borrowed_booksImp borrowed_booksImp = new borrowed_booksImp();
+        //set the date to the current date
+        java.sql.Date date = new java.sql.Date(new Date().getTime());
+        borrowed_booksImp.returned(isbn, date );
+
+
+
+return null;
     }
 
+
+// all down need updates
+    @Override
+    public book statistics() {
+        System.out.println("Statistics:");
+        System.out.println("list of books borrowed: ");
+        //call the showBorrowed method
+        showBorrowed();
+      System.out.println("list of books available: ");
+        //call the showAvailable method
+        showAvailable();
+        System.out.println("list of books lost: ");
+        //call the showLost method
+        showLost();
+        return null;
+    }
+    public  book showBorrowed(){
+
+        String query = "SELECT * FROM books WHERE status = 'borrowed'";
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                System.out.println("Books:");
+                System.out.println("Title: " + rs.getString("title"));
+                System.out.println("Author: " + rs.getString("author"));
+                System.out.println("ISBN: " + rs.getInt("ISBN"));
+                System.out.println("Status: " + rs.getString("status"));
+                System.out.println("**************************");
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to retrieve books.");
+        }
+        return null;
+
+
+    }
+    public  book showAvailable(){
+
+        String query = "SELECT * FROM books WHERE status = 'available'";
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                System.out.println("Books:");
+                System.out.println("Title: " + rs.getString("title"));
+                System.out.println("Author: " + rs.getString("author"));
+                System.out.println("ISBN: " + rs.getInt("ISBN"));
+                System.out.println("Status: " + rs.getString("status"));
+                System.out.println("**************************");
+
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to retrieve books.");
+        }
+        return null;
+
+
+    }
+    public  book showLost(){
+
+        String query = "SELECT * FROM books WHERE status = 'lost'";
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                System.out.println("Books:");
+                System.out.println("Title: " + rs.getString("title"));
+                System.out.println("Author: " + rs.getString("author"));
+                System.out.println("ISBN: " + rs.getInt("ISBN"));
+                System.out.println("Status: " + rs.getString("status"));
+                System.out.println("**************************");
+
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to retrieve books.");
+        }
+        return null;
+
+
+    }
 
 }

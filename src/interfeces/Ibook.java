@@ -15,7 +15,9 @@ public interface Ibook {
     book searchByIsbn(int ISBN);
 
     book borrow(int isbn);
+
     book returnBook(int isbn);
+    book statistics();
 
 
 }
