@@ -20,7 +20,8 @@ public class Main {
                 "4 : borrow a book \n" +
                 "5 : return a book\n" +
                 "6 : Generate a static reports\n"+
-                "7 : borrower's management\n");
+                "7 : borrower's management\n " +
+                "8 : Lost a book\n\n");
 
         int list = Integer.parseInt(menu);
 
@@ -251,6 +252,31 @@ public class Main {
                             System.out.println("Invalid choice");
                     }
                     break;
+            case 8 :
+                String iSBN4 = JOptionPane.showInputDialog("Insert the ISBN of losted book");
+                int isbn3 = Integer.parseInt(iSBN4);
+                bookImp IMP4 = new bookImp();
+                book foundBook3 = IMP4.searchByIsbn(isbn3);
+                if(foundBook3!= null) {
+                    String l1 = JOptionPane.showInputDialog("Do you want to update the status of you book as lost?\n1: Yes\n2: No");
+                    int yn = Integer.parseInt(l1);
+
+                    switch (yn) {
+                        case 1:
+                            bookImp imp3 = new bookImp();
+                            imp3.lostStatus(isbn3);
+                            break;
+                        case 2:
+                            JOptionPane.showMessageDialog(null, "See you again!");
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "Invalid option");
+                            break;
+                    }
+
+                }
+                break;
+
 
             default:
                 System.out.println("Invalid choice");

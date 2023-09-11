@@ -323,6 +323,22 @@ return null;
 
         return false;
     }
+    //see if it is lost or not
+    public boolean isLost(int isbn) {
+        String query = "SELECT * FROM books WHERE isbn = ? AND status = 'lost'";
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
+            statement.setInt(1, isbn);
+
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return false;
+    }
 
     @Override
     public book updateStatus(int isbn) {

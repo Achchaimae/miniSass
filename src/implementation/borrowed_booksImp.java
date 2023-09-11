@@ -17,9 +17,10 @@ public class borrowed_booksImp {
     public book borrow(int ISBN, int id, java.util.Date date_borrowed) {
         book b  = book.getInstance();
         bookImp bookImp = new bookImp();
+
         //condition if the book is borrowed or not
-        if (bookImp.isBorrowed(ISBN)) {
-            JOptionPane.showMessageDialog(null, "Book is already borrowed");
+        if (bookImp.isBorrowed(ISBN) || bookImp.isLost(ISBN)) {
+            JOptionPane.showMessageDialog(null, "Book is already borrowed/lost");
             return null;
         }
         else {
