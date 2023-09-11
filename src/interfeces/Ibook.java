@@ -18,6 +18,8 @@ public interface Ibook {
 
     book returnBook(int isbn);
     book statistics();
-
+    boolean isBorrowed(int isbn);
+    book updateStatus(int isbn);
+    book lostStatus(int isbn);
 
 }

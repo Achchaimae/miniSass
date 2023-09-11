@@ -234,6 +234,8 @@ return null;
         showLost();
         return null;
     }
+
+
     public  book showBorrowed(){
 
         String query = "SELECT * FROM books WHERE status = 'borrowed'";
@@ -305,5 +307,55 @@ return null;
 
 
     }
+    @Override
+    public boolean isBorrowed(int isbn) {
+        String query = "SELECT * FROM books WHERE isbn = ? AND status = 'borrowed'";
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
+            statement.setInt(1, isbn);
 
-}
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return false;
+    }
+
+    @Override
+    public book updateStatus(int isbn) {
+        String query = "UPDATE books SET status = 'available' WHERE isbn = ?";
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
+            statement.setInt(1, isbn);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Book status updated successfully.");
+                System.out.println("Book status updated successfully.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to update the book status.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+    public book lostStatus(int isbn) {
+        String query = "UPDATE books SET status = 'lost' WHERE isbn = ?";
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
+            statement.setInt(1, isbn);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Book status updated successfully.");
+                System.out.println("Book status updated successfully.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to update the book status.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    }

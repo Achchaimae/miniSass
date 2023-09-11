@@ -120,6 +120,7 @@ public class Main {
                 bookImp IMP = new bookImp();
                 book foundBook2 = IMP.searchByIsbn(isbn);
 
+
                 if(foundBook2!= null) {
                 String l1 = JOptionPane.showInputDialog("Do you want to borrow this book?\n1: Yes\n2: No");
                     int yn = Integer.parseInt(l1);
@@ -138,7 +139,7 @@ public class Main {
                     }
 
                 }
-
+            break;
             case 5 :
                 String iSBN3 = JOptionPane.showInputDialog("Insert the ISBN of the book for return");
                 int isbn2 = Integer.parseInt(iSBN3);
@@ -162,6 +163,7 @@ public class Main {
                     }
 
                 }
+                break;
             case 6 :
                 //call the function static report
                 book b1 = book.getInstance();
@@ -244,10 +246,12 @@ public class Main {
                             }
 
                             break;
+
                         default:
                             System.out.println("Invalid choice");
                     }
                     break;
+
             default:
                 System.out.println("Invalid choice");
 
