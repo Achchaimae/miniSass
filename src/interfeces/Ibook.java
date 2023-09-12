@@ -21,5 +21,8 @@ public interface Ibook {
     boolean isBorrowed(int isbn);
     book updateStatus(int isbn);
     book lostStatus(int isbn);
+    int getBorrowedBooks();
+    int getAvailableBooks();
+    int getLostBooks();
 
 }

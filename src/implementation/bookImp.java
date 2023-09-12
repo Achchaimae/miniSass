@@ -223,15 +223,15 @@ return null;
     @Override
     public book statistics() {
         System.out.println("Statistics:");
-        System.out.println("list of books borrowed: ");
+        System.out.println("Number of borrowed books: ");
         //call the showBorrowed method
-        showBorrowed();
-      System.out.println("list of books available: ");
+        getBorrowedBooks();
+        System.out.println("Number of available books: ");
         //call the showAvailable method
-        showAvailable();
-        System.out.println("list of books lost: ");
+        getAvailableBooks();
+        System.out.println("Number of losted books: ");
         //call the showLost method
-        showLost();
+        getLostBooks();
         return null;
     }
 
@@ -374,4 +374,50 @@ return null;
         return null;
     }
 
+    @Override
+    public int getBorrowedBooks() {
+        String query = "SELECT COUNT(*) FROM books WHERE status = 'borrowed'";
+        try (PreparedStatement statement = conx.prepareStatement(query)) {
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                System.out.println(rs.getInt(1));
+//                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    return 0 ;
     }
+
+    @Override
+    public int getAvailableBooks() {
+        String query = "SELECT COUNT(*) FROM books WHERE status ='available'";
+        try(PreparedStatement statement = conx.prepareStatement((query))){
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()) {
+                System.out.println(rs.getInt(1));
+            }
+            } catch(SQLException e){
+                throw new RuntimeException(e);
+            }
+        return 0;
+        }
+
+
+
+
+    @Override
+    public int getLostBooks() {
+        String query ="SELECT COUNT(*) FROM books WHERE status ='lost'";
+        try(PreparedStatement statement = conx.prepareStatement(query)){
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()){
+                System.out.println(rs.getInt(1));
+            }
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
+}
