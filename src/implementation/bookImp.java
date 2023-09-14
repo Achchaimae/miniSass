@@ -31,7 +31,7 @@ public class bookImp implements Ibook {
     private Connection conx = DatabaseConnection.getConn();
 
     @Override
-    public book show(book b) {
+    public void show() {
         String query = "SELECT * FROM books";
 
         try (PreparedStatement statement = conx.prepareStatement(query)) {
@@ -51,7 +51,6 @@ public class bookImp implements Ibook {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to retrieve books.");
         }
-    return b;
     }
 
 
@@ -221,7 +220,7 @@ return null;
 
 // all down need updates
     @Override
-    public book statistics() {
+    public void statistics() {
         System.out.println("Statistics:");
         System.out.println("Number of borrowed books: ");
         //call the showBorrowed method
@@ -232,7 +231,7 @@ return null;
         System.out.println("Number of losted books: ");
         //call the showLost method
         getLostBooks();
-        return null;
+
     }
 
 

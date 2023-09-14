@@ -4,7 +4,7 @@ import dto.book;
 
 public interface Ibook {
 
-    book show(book b);
+    void show();
     book add(book b);
 
     book update(book b);
@@ -17,7 +17,7 @@ public interface Ibook {
     book borrow(int isbn);
 
     book returnBook(int isbn);
-    book statistics();
+    void statistics();
     boolean isBorrowed(int isbn);
     book updateStatus(int isbn);
     book lostStatus(int isbn);

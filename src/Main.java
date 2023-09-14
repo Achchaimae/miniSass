@@ -11,7 +11,9 @@ import  javax.swing.JOptionPane;
 public class Main {
     public static void main(String[] args) {
 
+
         System.out.println("Hello to miniSas Library!");
+        while ( true){
         String menu = JOptionPane.showInputDialog("Hello to miniSas Library \n <choose your need> \n\n" +
                 "******* Menu ******* \n" +
                 "1 : Show the list of books \n" +
@@ -24,25 +26,27 @@ public class Main {
                 "8 : Lost a book\n" +
                 "9 : Exit\n\n");
 
+
         int list = Integer.parseInt(menu);
-        do {
+
+
             switch (list) {
                 case 1:
-                    book b = book.getInstance();
+
                     bookImp imp = new bookImp();
-                    imp.show(b);
+                    imp.show();
                     break;
                 case 2:
                     int manag;
 
-
+                    while ( true){
                     String list2 = JOptionPane.showInputDialog("what action do you want \n " +
                             "1: add a book\n " +
                             "2 update a book\n" +
                             "3 delete a book\n +" +
                             "4: Return to main menu\n\n");
                     manag = Integer.parseInt(list2);
-                    do {
+
                         switch (manag) {
                             case 1:
                                 book b2 = book.getInstance();
@@ -66,10 +70,10 @@ public class Main {
                                         case 1:
                                             String title2 = JOptionPane.showInputDialog("Insert the title of the book");
                                             String author2 = JOptionPane.showInputDialog("Insert the author of the book");
-                                            String status2 = JOptionPane.showInputDialog("Insert the status of the book");
+
                                             foundBook.setTitle(title2);
                                             foundBook.setAuthor(author2);
-                                            foundBook.setStatus(dto.status.valueOf(status2));
+                                            
                                             // Assuming the update method is in the bookImp class
                                             imp3.update(foundBook);
                                             break;
@@ -112,6 +116,7 @@ public class Main {
 
                                 break;
                             case 4:
+                                main(args);
                                 System.out.println("Return to main menu");
                                 break;
                             default:
@@ -120,11 +125,9 @@ public class Main {
 
                         }
                         System.out.println(manag);
-                    } while (manag != 4);
-                    if (manag == 4) {
-                        main(args);
+
                     }
-                    break;
+
                 case 3:
                     String search = JOptionPane.showInputDialog("Insert the title of the book or the author");
                     bookImp imp2 = new bookImp();
@@ -157,6 +160,7 @@ public class Main {
                     }
                     break;
                 case 5:
+
                     String iSBN3 = JOptionPane.showInputDialog("Insert the ISBN of the book for return");
                     int isbn2 = Integer.parseInt(iSBN3);
                     bookImp IMP3 = new bookImp();
@@ -189,14 +193,14 @@ public class Main {
 
                     break;
                 case 7:
-
+                    while ( true){
                     String list4 = JOptionPane.showInputDialog("what action do you want \n " +
                             "1: add a borrower\n " +
                             "2 update a borrower\n" +
                             "3 delete a borrower \n" +
                             "4: Return to main menu\n\n");
                     int manag2 = Integer.parseInt(list4);
-                    do {
+
                         switch (manag2) {
                             case 1:
                                 borrower b2 = borrower.getInstance();
@@ -265,15 +269,14 @@ public class Main {
                                 }
 
                                 break;
-
+                                case 4:
+                                    main(args);
+                                    System.out.println("Return to main menu");
                             default:
                                 System.out.println("Invalid choice");
                         }
-                    } while (manag2 != 4);
-                    if (manag2 == 4) {
-                        main(args);
                     }
-                    break;
+
                 case 8:
                     String iSBN4 = JOptionPane.showInputDialog("Insert the ISBN of losted book");
                     int isbn3 = Integer.parseInt(iSBN4);
@@ -299,16 +302,15 @@ public class Main {
                     }
                     break;
                 case 9:
+                    System.exit(0);
                     System.out.println("Thank you for using our library");
                     break;
 
                 default:
+
                     System.out.println("Invalid choice");
 
             }
-        } while (list != 9);
-        if (list !=9) {
-            System.out.println("Thank you for using our library");
         }
 
 
